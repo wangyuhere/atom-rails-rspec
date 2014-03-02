@@ -8,6 +8,8 @@ class Rails
     return null unless file.match /\.rb$/i
 
     relativePath = file.substring(@root.length)
+    return null unless relativePath.match /^\/(app|lib|spec)\//i
+
     if relativePath.match /_spec\.rb$/
       relativePath = relativePath.replace /_spec\.rb$/, '.rb'
       relativePath = relativePath.replace /^\/spec\/lib\//, '/lib/'
