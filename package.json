@@ -1,0 +1,16 @@
+{
+  "name": "rails-rspec",
+  "main": "./lib/rails-rspec",
+  "version": "0.0.0",
+  "description": "Toggle spec and tested file in rails project",
+  "activationEvents": [
+    "rails-rspec:toggle-spec-file"
+  ],
+  "repository": "https://github.com/wangyuhere/atom-rails-rspec",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+  }
+}
