@@ -1,21 +1,46 @@
+fs = require 'fs'
 Path = require 'path'
+
+supportedPathsReg = (paths) ->
+  new RegExp("^\/(app|lib|#{paths.join('|')})\/", 'i')
+
+specLibPathsReg = (paths) ->
+  new RegExp("^\/(#{paths.join('|')})\/lib\/", 'i')
+
+specAppPathsReg = (paths) ->
+  new RegExp("^\/(#{paths.join('|')})\/", 'i')
 
 module.exports =
 class Rails
-  constructor: (@root) ->
+  constructor: (@root, @specPaths, @specDefault) ->
 
   toggleSpecFile: (file) ->
     return null unless file.match /\.rb$/i
 
     relativePath = file.substring(@root.length)
-    return null unless relativePath.match /^\/(app|lib|spec)\//i
+    return null unless relativePath.match supportedPathsReg(@specPaths)
 
     if relativePath.match /_spec\.rb$/
-      relativePath = relativePath.replace /_spec\.rb$/, '.rb'
-      relativePath = relativePath.replace /^\/spec\/lib\//, '/lib/'
-      relativePath = relativePath.replace /^\/spec\//, '/app/'
+      @getRubyFile relativePath
     else
-      relativePath = relativePath.replace /\.rb$/, '_spec.rb'
-      relativePath = relativePath.replace /^\/app\//, '/spec/'
-      relativePath = relativePath.replace /^\/lib\//, '/spec/lib/'
-    Path.join @root, relativePath
+      @findSpecFile relativePath
+
+  getRubyFile: (path) ->
+    path = path.replace /_spec\.rb$/, '.rb'
+    path = path.replace specLibPathsReg(@specPaths), '/lib/'
+    path = path.replace specAppPathsReg(@specPaths), '/app/'
+    Path.join @root, path
+
+  findSpecFile: (path) ->
+    for specPath in @specPaths
+      file = @getSpecFile path, specPath
+      return file if fs.existsSync file
+    @getSpecFile path, @specDefault
+
+  getSpecFile: (path, specPath) ->
+    path = path.replace /\.rb$/, '_spec.rb'
+    if path.match /^\/app\//
+      newPath = path.replace /^\/app\//, "/#{specPath}/"
+    else
+      newPath = path.replace /^\/lib\//, "/#{specPath}/lib/"
+    Path.join @root, newPath

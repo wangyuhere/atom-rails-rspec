@@ -24,11 +24,11 @@ describe 'RailsRspec', ->
       toggleFile 'app/models/user.rb'
 
       runs ->
-        expect(currentPath()).toBe Path.join(__dirname, 'spec/models/user_spec.rb')
+        expect(currentPath()).toBe Path.join(__dirname, 'fixtures/spec/models/user_spec.rb')
 
     it 'does nothing for not rspec related file', ->
       file = 'app/config.json'
       toggleFile file
 
       runs ->
-        expect(currentPath()).toBe Path.join(__dirname, file)
+        expect(currentPath()).toBe Path.join(__dirname, 'fixtures', file)
