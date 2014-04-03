@@ -15,8 +15,6 @@ class Rails
   constructor: (@root, @specPaths, @specDefault) ->
 
   toggleSpecFile: (file) ->
-    return null unless file.match /\.rb$/i
-
     relativePath = file.substring(@root.length)
     return null unless relativePath.match supportedPathsReg(@specPaths)
 
@@ -26,7 +24,10 @@ class Rails
       @findSpecFile relativePath
 
   getRubyFile: (path) ->
-    path = path.replace /_spec\.rb$/, '.rb'
+    if path.match /^\/spec\/views/i
+      path = path.replace /_spec\.rb$/, ''
+    else
+      path = path.replace /_spec\.rb$/, '.rb'
     path = path.replace specLibPathsReg(@specPaths), '/lib/'
     path = path.replace specAppPathsReg(@specPaths), '/app/'
     Path.join @root, path
@@ -38,7 +39,11 @@ class Rails
     @getSpecFile path, @specDefault
 
   getSpecFile: (path, specPath) ->
-    path = path.replace /\.rb$/, '_spec.rb'
+    if path.match /\.rb$/
+      path = path.replace /\.rb$/, '_spec.rb'
+    else
+      path = path + '_spec.rb'
+
     if path.match /^\/app\//
       newPath = path.replace /^\/app\//, "/#{specPath}/"
     else
