@@ -1,7 +1,7 @@
 {
   "name": "rails-rspec",
   "main": "./lib/rails-rspec",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Toggle spec and tested file in rails project",
   "activationEvents": [
     "rails-rspec:toggle-spec-file"
