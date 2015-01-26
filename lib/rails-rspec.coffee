@@ -6,8 +6,8 @@ module.exports =
     specDefaultPath: 'spec'
 
   activate: (state) ->
-    atom.workspaceView.command 'rails-rspec:toggle-spec-file', '.editor', =>
-      @toggleSpecFile()
+    atom.commands.add 'atom-text-editor',
+      'rails-rspec:toggle-spec-file': (event) => @toggleSpecFile()
 
   toggleSpecFile: ->
     editor = atom.workspace.getActiveEditor()
