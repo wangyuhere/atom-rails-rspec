@@ -10,8 +10,9 @@ module.exports =
       'rails-rspec:toggle-spec-file': (event) => @toggleSpecFile()
 
   toggleSpecFile: ->
-    editor = atom.workspace.getActiveEditor()
+    editor = atom.workspace.getActiveTextEditor()
     specPaths = atom.config.get 'rails-rspec.specSearchPaths'
     specDefault = atom.config.get 'rails-rspec.specDefaultPath'
-    file = new Rails(atom.project.getPath(), specPaths, specDefault).toggleSpecFile(editor.getPath())
-    atom.workspaceView.open(file) if file?
+    root = atom.project.getPaths()[0]
+    file = new Rails(root, specPaths, specDefault).toggleSpecFile(editor.getPath())
+    atom.workspace.open(file) if file?
