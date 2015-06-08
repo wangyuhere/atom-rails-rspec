@@ -1,9 +1,13 @@
 Rails = require './rails'
 
 module.exports =
-  configDefaults:
-    specSearchPaths: ['spec', 'fast_spec']
-    specDefaultPath: 'spec'
+  config:
+    specSearchPaths:
+      type: 'array'
+      default: ['spec', 'fast_spec']
+    specDefaultPath:
+      type: 'string'
+      default: 'spec'
 
   activate: (state) ->
     atom.commands.add 'atom-text-editor',
